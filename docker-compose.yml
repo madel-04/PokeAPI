@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./backend/.env
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: .
+    ports:
+      - "5173:5173"
+    env_file:
+      - .env
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+# version: "3.9"
+
+# services:
+#   backend:
+#     build:
+#       context: ./backend
+#     ports:
+#       - "3000:3000"
+#     environment:
+#       - CLIENT_ID=${CLIENT_ID}
+#       - CLIENT_SECRET=${CLIENT_SECRET}
+#       - JWT_SECRET=${JWT_SECRET}
+#       - POLLINATIONS_KEY=${POLLINATIONS_KEY}
+
+#   frontend:
+#     build:
+#       context: .
+#     ports:
+#       - "5173:5173"
+#     environment:
+#       - VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}
+#     depends_on:
+#       - backend
