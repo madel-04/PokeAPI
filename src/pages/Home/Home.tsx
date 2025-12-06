@@ -103,9 +103,10 @@ export default function Home() {
                   <button
                     onClick={loginWithGoogle}
                     aria-label="Conectar con cuenta de Google"
-                    className="w-full bg-white hover:bg-gray-50 border-3 border-gray-800 text-gray-900 font-bold py-3.5 px-5 rounded-2xl shadow-lg transform hover:scale-105 transition-all flex items-center justify-center gap-2 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-offset-2"
+                    className="w-full bg-white hover:bg-gray-50 border-3 border-gray-800 text-gray-900 font-semibold py-2 px-4 rounded-xl shadow-md transform hover:scale-105 transition-all flex items-center justify-center gap-2 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-offset-2"
+                    style={{ fontSize: '13px' }}
                   >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true">
                       <path
                         fill="#4285F4"
                         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
