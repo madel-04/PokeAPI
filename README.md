@@ -1,4 +1,4 @@
-# PokeAPI Project — Globant Piscine
+# PokeAPI Project — Pokemon Creator -  Globant Piscine
 
 Este proyecto consiste en una Single Page Application (SPA) desarrollada con **React + TypeScript + Vite** y un backend en **Node.js + Express**, que permite:
 
@@ -7,9 +7,6 @@ Este proyecto consiste en una Single Page Application (SPA) desarrollada con **R
 - Generar nuevos Pokémon usando **IA (Pollinations API)**
 - Compartir resultados con otros usuarios
 - Todo dentro de una arquitectura **mobile-first**, accesible y dockerizada.
-# 🎨 Pokémon Creator - Globant Piscine Project
-
-Aplicación web Single-Page Application (SPA) desarrollada con **React + TypeScript + Vite + TailwindCSS** que permite crear y compartir Pokémon únicos usando IA.
 
 ---
 
