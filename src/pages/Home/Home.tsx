@@ -38,42 +38,43 @@ export default function Home() {
 
       {/* Contenido principal */}
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4 pt-40">
-        <div className="max-w-md w-full">
+        <div className="max-w-sm w-full">
           {/* Pantalla Pokédex */}
-          <div className="bg-white rounded-3xl shadow-2xl border-8 border-red-600 p-8 relative">
+          <div className="bg-white rounded-3xl shadow-2xl border-8 border-red-600 p-6 relative">
             {/* Borde superior decorativo */}
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-32 h-8 bg-red-600 rounded-t-xl"></div>
+            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-24 h-6 bg-red-600 rounded-t-xl"></div>
             
             {/* Pantalla interior */}
-            <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl p-6 border-4 border-gray-800 shadow-inner">
-              <div className="text-center mb-6">
-                <h1 className="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-500 to-blue-500" style={{ fontFamily: "'Pokemon Solid', sans-serif" }}>
+            <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl p-5 border-4 border-gray-800 shadow-inner">
+              <div className="text-center mb-5">
+                <h1 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-500 to-blue-500" style={{ fontFamily: "'Pokemon Solid', sans-serif" }}>
                   POKÉMON
                 </h1>
-                <h2 className="text-xl font-semibold text-gray-700">
+                <h2 className="text-lg font-semibold text-gray-700">
                   CREATOR
                 </h2>
-                <p className="text-gray-600 text-sm mt-2">
+                <p className="text-gray-600 text-xs mt-1">
                   Sistema de Creación con IA
                 </p>
               </div>
 
               {isAuthenticated ? (
-                <div className="space-y-4 animate-fadeIn">
+                <div className="space-y-3 animate-fadeIn">
                   {/* Estado activo */}
-                  <div className="bg-green-100 border-2 border-green-500 rounded-xl p-4 text-center">
-                    <div className="flex items-center justify-center gap-2 mb-2">
-                      <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
-                      <p className="text-green-800 font-bold">SISTEMA ACTIVO</p>
+                  <div className="bg-green-100 border-2 border-green-500 rounded-xl p-3 text-center">
+                    <div className="flex items-center justify-center gap-2 mb-1">
+                      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                      <p className="text-green-800 font-bold text-sm">SISTEMA ACTIVO</p>
                     </div>
-                    <p className="text-green-700 text-sm">Entrenador verificado</p>
+                    <p className="text-green-700 text-xs">Entrenador verificado</p>
                   </div>
                   
                   {/* Botón principal */}
                   <button
                     onClick={() => navigate("/create")}
                     aria-label="Iniciar creación de Pokémon"
-                    className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold py-4 px-6 rounded-full shadow-lg transform hover:scale-105 transition-all border-4 border-yellow-600 shine relative overflow-hidden focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:ring-offset-2"
+                    className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold py-3 px-5 rounded-full shadow-lg transform hover:scale-105 transition-all border-3 border-yellow-600 shine relative overflow-hidden focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:ring-offset-2"
+                    style={{ fontSize: '14px' }}
                   >
                     <span className="relative z-10">▶ INICIAR CREACIÓN</span>
                   </button>
@@ -82,16 +83,17 @@ export default function Home() {
                   <button
                     onClick={logout}
                     aria-label="Cerrar sesión de usuario"
-                    className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-full shadow-md transform hover:scale-105 transition-all border-2 border-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 focus:ring-offset-2"
+                    className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transform hover:scale-105 transition-all border-2 border-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 focus:ring-offset-2"
+                    style={{ fontSize: '13px' }}
                   >
                     ⏏ CERRAR SESIÓN
                   </button>
                 </div>
               ) : (
-                <div className="space-y-4 animate-fadeIn">
+                <div className="space-y-3 animate-fadeIn">
                   {/* Advertencia */}
-                  <div className="bg-yellow-100 border-2 border-yellow-500 rounded-xl p-4 text-center">
-                    <p className="text-yellow-800 font-bold text-sm">
+                  <div className="bg-yellow-100 border-2 border-yellow-500 rounded-xl p-3 text-center">
+                    <p className="text-yellow-800 font-bold text-xs">
                       ⚠️ ACCESO RESTRINGIDO
                     </p>
                     <p className="text-yellow-700 text-xs mt-1">
@@ -131,16 +133,16 @@ export default function Home() {
             </div>
 
             {/* Botones decorativos inferiores */}
-            <div className="flex justify-center gap-4 mt-6">
-              <div className="w-12 h-12 rounded-full bg-gray-800 border-4 border-gray-600 shadow-inner"></div>
-              <div className="w-12 h-12 rounded-lg bg-green-500 border-4 border-green-700 shadow-inner"></div>
+            <div className="flex justify-center gap-3 mt-4">
+              <div className="w-10 h-10 rounded-full bg-gray-800 border-3 border-gray-600 shadow-inner"></div>
+              <div className="w-10 h-10 rounded-lg bg-green-500 border-3 border-green-700 shadow-inner"></div>
             </div>
           </div>
 
           {/* Información inferior */}
-          <div className="text-center mt-6 text-gray-700 text-sm">
+          <div className="text-center mt-4 text-gray-700 text-xs">
             <p>v1.0.0 | Sistema de Creación Pokémon</p>
-            <p className="text-xs text-gray-500 mt-1">Powered by IA • OAuth2 Secured</p>
+            <p className="text-xs text-gray-500 mt-0.5">Powered by IA • OAuth2 Secured</p>
           </div>
         </div>
       </div>
