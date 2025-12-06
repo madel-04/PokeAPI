@@ -40,7 +40,6 @@ Aplicación web Single-Page Application (SPA) desarrollada con **React + TypeScr
 
 ```bash
 git clone <tu-repositorio>
-cd chati
 ```
 
 ### 2️⃣ Configurar variables de entorno
@@ -64,7 +63,6 @@ VITE_GOOGLE_CLIENT_ID=tu_google_client_id
 CLIENT_ID=tu_google_client_id
 CLIENT_SECRET=tu_google_client_secret
 GOOGLE_REDIRECT_URI=http://localhost:3000/auth/google/redirect
-JWT_SECRET=tu_secreto_jwt_seguro
 ```
 
 ### 3️⃣ Configurar Google OAuth2
@@ -92,6 +90,7 @@ docker-compose up --build
 **Detener:**
 ```bash
 docker-compose down
+docker compose down -v --rmi all 
 ```
 
 ---
@@ -126,7 +125,7 @@ npm run dev
 ## 📂 Estructura del Proyecto
 
 ```
-chati/
+PokeAPI/
 ├── backend/
 │   ├── server.js          # Servidor Express
 │   ├── Dockerfile
