@@ -14,7 +14,7 @@ const pokemonByGeneration = {
 };
 
 const baseOptions = Object.values(pokemonByGeneration).flat();
-const abilityOptions = ["Fire", "Water", "Flying", "Electric", "Grass", "Ice"];
+const abilityOptions = ["Fire", "Water", "Flying", "Electric", "Grass", "Ice", "Psychic", "Dark", "Dragon", "Fairy", "Fighting", "Rock", "Ground", "Steel", "Ghost", "Poison", "Bug", "Normal"];
 
 // ✅ Estilos de botones unificados
 const buttonStyles = {
@@ -232,7 +232,7 @@ export default function Create() {
             </div>
           )}
 
-          <div className="space-y-8">
+          <div className="space-y-10">
             <PokemonSelector 
               label="🧬 ADN BASE DEL POKÉMON"
               options={baseOptions} 

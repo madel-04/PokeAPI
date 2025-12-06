@@ -44,6 +44,18 @@ const abilityEmojis: Record<string, string> = {
   Electric: "⚡",
   Grass: "🌿",
   Ice: "❄️",
+  Psychic: "🔮",
+  Dark: "🌑",
+  Dragon: "🐉",
+  Fairy: "🧚",
+  Fighting: "🥊",
+  Rock: "🪨",
+  Ground: "⛰️",
+  Steel: "⚙️",
+  Ghost: "👻",
+  Poison: "☠️",
+  Bug: "🐛",
+  Normal: "⭐",
 };
 
 // ✅ Colores estilo 2048 adaptados a Pokémon
@@ -176,6 +188,66 @@ const abilityColors: Record<string, { bg: string; text: string; shadow: string }
     text: "#FFF", 
     shadow: "0 4px 12px rgba(61, 193, 211, 0.5)" 
   },
+  Psychic: { 
+    bg: "linear-gradient(135deg, #FDA7DF 0%, #F368E0 100%)", 
+    text: "#FFF", 
+    shadow: "0 4px 12px rgba(253, 167, 223, 0.5)" 
+  },
+  Dark: { 
+    bg: "linear-gradient(135deg, #2F3542 0%, #57606F 100%)", 
+    text: "#FFF", 
+    shadow: "0 4px 12px rgba(47, 53, 66, 0.5)" 
+  },
+  Dragon: { 
+    bg: "linear-gradient(135deg, #5F27CD 0%, #341F97 100%)", 
+    text: "#FFF", 
+    shadow: "0 4px 12px rgba(95, 39, 205, 0.5)" 
+  },
+  Fairy: { 
+    bg: "linear-gradient(135deg, #FFC8DD 0%, #FFAFCC 100%)", 
+    text: "#333", 
+    shadow: "0 4px 12px rgba(255, 200, 221, 0.5)" 
+  },
+  Fighting: { 
+    bg: "linear-gradient(135deg, #FC5C65 0%, #EB3B5A 100%)", 
+    text: "#FFF", 
+    shadow: "0 4px 12px rgba(252, 92, 101, 0.5)" 
+  },
+  Rock: { 
+    bg: "linear-gradient(135deg, #C4A57B 0%, #9C826B 100%)", 
+    text: "#FFF", 
+    shadow: "0 4px 12px rgba(196, 165, 123, 0.5)" 
+  },
+  Ground: { 
+    bg: "linear-gradient(135deg, #D4A574 0%, #C4915D 100%)", 
+    text: "#FFF", 
+    shadow: "0 4px 12px rgba(212, 165, 116, 0.5)" 
+  },
+  Steel: { 
+    bg: "linear-gradient(135deg, #95A5A6 0%, #7F8C8D 100%)", 
+    text: "#FFF", 
+    shadow: "0 4px 12px rgba(149, 165, 166, 0.5)" 
+  },
+  Ghost: { 
+    bg: "linear-gradient(135deg, #5F27CD 0%, #341F97 100%)", 
+    text: "#FFF", 
+    shadow: "0 4px 12px rgba(95, 39, 205, 0.5)" 
+  },
+  Poison: { 
+    bg: "linear-gradient(135deg, #A55EEA 0%, #8854D0 100%)", 
+    text: "#FFF", 
+    shadow: "0 4px 12px rgba(165, 94, 234, 0.5)" 
+  },
+  Bug: { 
+    bg: "linear-gradient(135deg, #A8E063 0%, #7BED9F 100%)", 
+    text: "#333", 
+    shadow: "0 4px 12px rgba(168, 224, 99, 0.5)" 
+  },
+  Normal: { 
+    bg: "linear-gradient(135deg, #DFE4EA 0%, #C4CDD5 100%)", 
+    text: "#333", 
+    shadow: "0 4px 12px rgba(223, 228, 234, 0.5)" 
+  },
 };
 
 // Color por defecto
@@ -188,19 +260,32 @@ const defaultColor = {
 export default function PokemonSelector({ options, onSelect, label }: PokemonSelectorProps) {
   const [selected, setSelected] = useState<string>("");
 
-return (
-  <div className="space-y-4">
-    <label 
-      id={`${label}-label`} // ✅ ID para aria-labelledby
-      className="font-bold text-xl text-gray-800 block border-l-4 border-yellow-500 pl-4 bg-gradient-to-r from-yellow-50 to-transparent py-2 rounded"
-    >
-      {label}
-    </label>
-    <div 
-      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-h-96 overflow-y-auto p-3 bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-inner"
-      role="group" // ✅ Agrupar botones relacionados
-      aria-labelledby={`${label}-label`} // ✅ Asociar con label
-    >
+  return (
+    <div className="space-y-6">
+      <label 
+        id={`${label}-label`}
+        className="pokemon-title text-base sm:text-lg text-gray-800 block text-center mb-6"
+        style={{
+          color: '#776E65',
+          textShadow: 'none',
+          letterSpacing: '1px'
+        }}
+      >
+        {label}
+      </label>
+      <div 
+        className="grid-container grid grid-cols-2 gap-3"
+        style={{
+          maxHeight: '280px',
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#BBADA0 #E8E4D9',
+          paddingRight: '4px'
+        }}
+        role="group"
+        aria-labelledby={`${label}-label`}
+      >
       {options.map((opt) => {
           const color = abilityColors[opt] || defaultColor;
           const isSelected = selected === opt;
@@ -216,75 +301,69 @@ return (
             aria-label={`Seleccionar ${opt}`}
             aria-pressed={isSelected}
             aria-describedby={isSelected ? `${opt}-selected` : undefined}
-              className="relative group focus:outline-none"
-              style={{
-                background: isSelected ? color.bg : "#FFFFFF",
-                color: isSelected ? color.text : "#1F2937",
-                boxShadow: isSelected ? color.shadow : "0 2px 8px rgba(0,0,0,0.1)",
-                borderRadius: "16px",
-                padding: "20px",
-                border: isSelected ? "3px solid rgba(255,255,255,0.5)" : "3px solid #E5E7EB",
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                transform: isSelected ? "scale(1.05)" : "scale(1)",
-                fontWeight: "700",
-                fontSize: "14px",
-                cursor: "pointer",
-                outline: "none",
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.boxShadow = `0 0 0 4px rgba(59, 130, 246, 0.5), ${isSelected ? color.shadow : "0 2px 8px rgba(0,0,0,0.1)"}`;
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.boxShadow = isSelected ? color.shadow : "0 2px 8px rgba(0,0,0,0.1)";
-              }}
-              onMouseEnter={(e) => {
-                if (!isSelected) {
-                  e.currentTarget.style.transform = "scale(1.02) translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 6px 16px rgba(0,0,0,0.15)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isSelected) {
-                  e.currentTarget.style.transform = "scale(1)";
-                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
-                }
-              }}
-            >
-              {/* Emoji */}
-              <div className="text-3xl mb-2 filter drop-shadow-lg" aria-hidden="true">
-                {abilityEmojis[opt] || "✨"}
-              </div>
-              
-              {/* Nombre */}
-              <div className="text-xs font-bold tracking-wide">
-                {opt}
-              </div>
+            className={`tile ${isSelected ? 'tile-merge' : ''} relative group focus:outline-none`}
+            style={{
+              background: isSelected ? color.bg : "#CDC1B4",
+              color: isSelected ? color.text : "#776E65",
+              boxShadow: isSelected ? color.shadow : "0 2px 6px rgba(0,0,0,0.12)",
+              borderRadius: "var(--tile-border-radius)",
+              padding: "20px 12px",
+              border: "none",
+              transition: "all 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+              transform: isSelected ? "scale(1)" : "scale(1)",
+              fontWeight: "700",
+              fontSize: "12px",
+              cursor: "pointer",
+              outline: "none",
+              minHeight: "100px",
+              width: "100%"
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.outline = "3px solid #3B4CCA";
+              e.currentTarget.style.outlineOffset = "3px";
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.outline = "none";
+            }}
+            onMouseEnter={(e) => {
+              if (!isSelected) {
+                e.currentTarget.style.transform = "scale(1.05)";
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isSelected) {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,0,0,0.12)";
+              }
+            }}
+          >
+            {/* Emoji */}
+            <div className="text-3xl mb-2 filter drop-shadow-lg" aria-hidden="true">
+              {abilityEmojis[opt] || "✨"}
+            </div>
+            
+            {/* Nombre */}
+            <div className="text-xs font-bold tracking-wider uppercase" style={{ letterSpacing: '0.5px', lineHeight: '1.2' }}>
+              {opt}
+            </div>
 
-              {/* Indicador de selección */}
-              {isSelected && (
-                <div 
-                  className="absolute -top-2 -right-2 w-7 h-7 rounded-full flex items-center justify-center animate-bounce"
-                  style={{
-                    background: "linear-gradient(135deg, #26DE81 0%, #20BF6B 100%)",
-                    boxShadow: "0 4px 12px rgba(38, 222, 129, 0.5)",
-                  }}
-                >
-                  <span className="text-white text-sm font-bold">✓</span>
-                </div>
-              )}
-              
-              {/* Efecto de brillo al hacer hover */}
+            {/* Indicador de selección (checkmark) */}
+            {isSelected && (
               <div 
-                className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-2xl"
+                className="absolute -top-2 -right-2 w-7 h-7 rounded-full flex items-center justify-center tile-new"
                 style={{
-                  background: "linear-gradient(135deg, rgba(255,255,255,0.8) 0%, transparent 100%)",
-                  pointerEvents: "none",
+                  background: "linear-gradient(135deg, #26DE81 0%, #20BF6B 100%)",
+                  boxShadow: "0 3px 8px rgba(38, 222, 129, 0.4)",
+                  border: "2px solid white",
                 }}
-              ></div>
-            </button>
-          );
-        })}
-      </div>
+              >
+                <span className="text-white text-base font-bold">✓</span>
+              </div>
+            )}
+          </button>
+        );
+      })}
     </div>
-  );
-}
+  </div>
+);}

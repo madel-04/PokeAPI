@@ -5,6 +5,315 @@
 /* Importar fuente Pokemon */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Press+Start+2P&display=swap');
 
+/* Fuente Pokémon Solid */
+@font-face {
+  font-family: 'Pokemon Solid';
+  src: url('https://fonts.cdnfonts.com/s/14562/Pokemon%20Solid.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ========================================
+   🎮 ESTILO 2048 ADAPTADO A POKÉMON
+   ======================================== */
+
+/* Variables globales estilo 2048 */
+:root {
+  --tile-size: 100px;
+  --tile-border-radius: 16px;
+  --tile-spacing: 16px;
+  --animation-duration: 0.2s;
+  
+  /* Paleta Pokémon */
+  --pokemon-red: #FF0000;
+  --pokemon-yellow: #FFCB05;
+  --pokemon-blue: #3B4CCA;
+  --pokemon-white: #FFFFFF;
+  --pokemon-black: #1A1A1A;
+  
+  /* Colores de fondo estilo 2048 */
+  --bg-light: #FAF8EF;
+  --bg-grid: #BBADA0;
+  --bg-tile-empty: #CDC1B4;
+}
+
+/* Reset y configuración base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', Arial, sans-serif;
+  background: linear-gradient(to bottom, var(--bg-light) 0%, #E8E4D9 100%);
+  color: var(--pokemon-black);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tipografía estilo retro Pokémon */
+.pokemon-title {
+  font-family: 'Press Start 2P', cursive;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 
+    3px 3px 0 var(--pokemon-yellow),
+    6px 6px 0 rgba(0,0,0,0.2);
+}
+
+/* Contenedor principal estilo 2048 */
+.game-container {
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Grid container estilo 2048 */
+.grid-container {
+  display: grid;
+  gap: var(--tile-spacing);
+  background: var(--bg-grid);
+  padding: var(--tile-spacing);
+  border-radius: 12px;
+  box-shadow: 
+    0 8px 24px rgba(0,0,0,0.15),
+    inset 0 0 0 3px rgba(255,255,255,0.1);
+}
+
+/* Tiles estilo 2048 con temática Pokémon */
+.tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tile-empty);
+  border-radius: var(--tile-border-radius);
+  font-weight: 700;
+  transition: all var(--animation-duration) cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tile:active {
+  transform: scale(0.97);
+}
+
+/* Animación de entrada */
+@keyframes tile-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.tile-new {
+  animation: tile-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Animación de merge */
+@keyframes tile-merge {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.tile-merge {
+  animation: tile-merge 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Botones estilo 2048 con paleta Pokémon */
+.btn-2048 {
+  position: relative;
+  padding: 16px 32px;
+  font-weight: 700;
+  font-size: 16px;
+  border: none;
+  border-radius: var(--tile-border-radius);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  outline: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.btn-2048:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+.btn-2048:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.btn-2048:focus-visible {
+  outline: 3px solid var(--pokemon-blue);
+  outline-offset: 3px;
+}
+
+/* Variantes de botones Pokémon */
+.btn-pokemon-red {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF4757 100%);
+  color: white;
+  border: 3px solid rgba(255,255,255,0.3);
+}
+
+.btn-pokemon-yellow {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #333;
+  border: 3px solid rgba(255,255,255,0.3);
+}
+
+.btn-pokemon-blue {
+  background: linear-gradient(135deg, #48DBFB 0%, #0ABDE3 100%);
+  color: white;
+  border: 3px solid rgba(255,255,255,0.3);
+}
+
+.btn-pokemon-green {
+  background: linear-gradient(135deg, #26DE81 0%, #20BF6B 100%);
+  color: white;
+  border: 3px solid rgba(255,255,255,0.3);
+}
+
+/* Score container estilo 2048 */
+.score-container {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.score-box {
+  background: var(--bg-grid);
+  color: white;
+  padding: 18px 28px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 100px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.score-label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.9;
+  margin-bottom: 5px;
+}
+
+.score-value {
+  font-size: 28px;
+  font-weight: 700;
+  font-family: 'Press Start 2P', cursive;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Efectos de brillo (shine) */
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.4),
+    transparent
+  );
+  transition: left 0.5s;
+  pointer-events: none;
+}
+
+.shine:hover::after {
+  left: 100%;
+}
+
+/* Animación de pulso suave */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+/* Fade in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  :root {
+    --tile-size: 80px;
+    --tile-border-radius: 12px;
+    --tile-spacing: 12px;
+  }
+  
+  .game-container {
+    padding: 10px;
+  }
+  
+  .score-box {
+    padding: 12px 18px;
+    min-width: 80px;
+  }
+  
+  .score-value {
+    font-size: 20px;
+  }
+  
+  .btn-2048 {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
+
 @layer base {
   * {
     margin: 0;
