@@ -4,33 +4,88 @@ import { useAuth } from "../../context/AuthContext";
 import PokemonSelector from "../../components/PokemonSelector";
 import { generatePokemonImage } from "../../services/imageService";
 
-const baseOptions = ["Pikachu", "Charmander", "Bulbasaur", "Squirtle"];
+const pokemonByGeneration = {
+  "Gen 1 (Kanto)": ["Pikachu", "Charmander", "Bulbasaur", "Squirtle", "Eevee", "Mewtwo", "Gengar", "Dragonite"],
+  "Gen 2 (Johto)": ["Typhlosion", "Feraligatr", "Meganium", "Umbreon", "Espeon", "Tyranitar"],
+  "Gen 3 (Hoenn)": ["Blaziken", "Swampert", "Sceptile", "Rayquaza", "Gardevoir"],
+  "Gen 4 (Sinnoh)": ["Infernape", "Empoleon", "Torterra", "Lucario", "Garchomp"],
+  "Gen 5 (Unova)": ["Samurott", "Emboar", "Serperior", "Zoroark"],
+  "Gen 6 (Kalos)": ["Greninja", "Sylveon", "Goodra"],
+};
+
+const baseOptions = Object.values(pokemonByGeneration).flat();
 const abilityOptions = ["Fire", "Water", "Flying", "Electric", "Grass", "Ice"];
+
+// ✅ Estilos de botones unificados
+const buttonStyles = {
+  primary: {
+    bg: "linear-gradient(135deg, #FF6B6B 0%, #FF4757 100%)",
+    shadow: "0 8px 20px rgba(255, 71, 87, 0.4)",
+    text: "#FFF",
+    border: "4px solid rgba(255,255,255,0.3)",
+  },
+  secondary: {
+    bg: "linear-gradient(135deg, #26DE81 0%, #20BF6B 100%)",
+    shadow: "0 8px 20px rgba(38, 222, 129, 0.4)",
+    text: "#FFF",
+    border: "4px solid rgba(255,255,255,0.3)",
+  },
+  tertiary: {
+    bg: "linear-gradient(135deg, #48DBFB 0%, #0ABDE3 100%)",
+    shadow: "0 8px 20px rgba(72, 219, 251, 0.4)",
+    text: "#FFF",
+    border: "4px solid rgba(255,255,255,0.3)",
+  },
+  warning: {
+    bg: "linear-gradient(135deg, #FFA502 0%, #FF7F50 100%)",
+    shadow: "0 8px 20px rgba(255, 165, 2, 0.4)",
+    text: "#FFF",
+    border: "4px solid rgba(255,255,255,0.3)",
+  },
+  danger: {
+    bg: "linear-gradient(135deg, #FC5C65 0%, #EB3B5A 100%)",
+    shadow: "0 8px 20px rgba(252, 92, 101, 0.4)",
+    text: "#FFF",
+    border: "4px solid rgba(255,255,255,0.3)",
+  },
+  disabled: {
+    bg: "linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%)",
+    shadow: "0 4px 12px rgba(0,0,0,0.1)",
+    text: "#9CA3AF",
+    border: "4px solid #E5E7EB",
+  },
+};
 
 export default function Create() {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const [base, setBase] = useState("");
   const [ability, setAbility] = useState("");
+  const [customText, setCustomText] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>("");
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-50 via-purple-50 to-blue-50 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center transform hover:scale-105 transition-transform">
-          <div className="text-8xl mb-6 animate-bounce">🔒</div>
-          <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-red-500 to-purple-600 bg-clip-text text-transparent">
-            Acceso Restringido
-          </h1>
-          <p className="text-gray-600 mb-8 text-lg">
-            Necesitas iniciar sesión para crear tu Pokémon único
+      <div className="min-h-screen bg-red-600 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 text-center border-8 border-red-700">
+          <div className="text-6xl mb-4">🔒</div>
+          <h1 className="text-2xl font-bold mb-4 text-red-600">ACCESO DENEGADO</h1>
+          <p className="text-gray-700 mb-6">
+            Debes autenticarte para acceder al laboratorio
           </p>
           <button
             onClick={() => navigate("/")}
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-4 rounded-xl font-bold text-lg hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg transform hover:scale-105"
+            style={{
+              background: buttonStyles.danger.bg,
+              boxShadow: buttonStyles.danger.shadow,
+              color: buttonStyles.danger.text,
+              border: buttonStyles.danger.border,
+            }}
+            className="w-full font-bold py-4 px-6 rounded-2xl transition-all transform hover:scale-105"
           >
-            🏠 Volver al Inicio
+            ← VOLVER A INICIO
           </button>
         </div>
       </div>
@@ -39,143 +94,270 @@ export default function Create() {
 
   const handleGenerate = async () => {
     if (!base || !ability) {
-      return alert("⚠️ Por favor selecciona una base y una habilidad");
+      const errorMsg = "⚠️ Debes seleccionar un ADN base y un poder elemental";
+      setError(errorMsg);
+      
+      setTimeout(() => {
+        const errorEl = document.getElementById('error-message');
+        if (errorEl) {
+          errorEl.focus();
+          errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+      
+      return;
     }
-
+    setError("");
     setLoading(true);
     try {
-      const prompt = `A ${base} Pokemon with ${ability} powers, digital art, vibrant colors, professional quality`;
+      let prompt = `A ${base} Pokemon with ${ability} powers`;
+      if (customText.trim()) {
+        prompt += `, ${customText.trim()}`;
+      }
+      prompt += ", digital art, vibrant colors, professional quality";
+
       const url = await generatePokemonImage(prompt);
       setImageUrl(url);
     } catch (error) {
-      console.error("Error generating image:", error);
-      alert("❌ Error al generar la imagen. Por favor intenta de nuevo.");
+      console.error("Error:", error);
+      setError("❌ Error al generar");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDownload = async () => {
+    if (!imageUrl) return;
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `pokemon-${base}-${ability}-${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      alert("❌ Error al descargar");
     }
   };
 
   const handleShare = () => {
     const shareUrl = `${window.location.origin}/result?base=${base}&ability=${ability}&image=${encodeURIComponent(imageUrl)}`;
     navigator.clipboard.writeText(shareUrl);
-    alert("✅ URL copiada al portapapeles");
+    alert("✅ URL copiada");
   };
 
   const handleReset = () => {
     setImageUrl("");
     setBase("");
     setAbility("");
+    setCustomText("");
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 p-4">
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8 bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
+    <div className="min-h-screen bg-gradient-to-b from-green-100 via-blue-50 to-yellow-50 relative">
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 bg-yellow-400 text-gray-900 px-4 py-2 rounded-lg font-bold shadow-lg focus:ring-4 focus:ring-blue-300"
+      >
+        Saltar al contenido principal
+      </a>
+
+      {/* Header estilo laboratorio */}
+      <div className="bg-gradient-to-r from-green-600 to-green-500 border-b-8 border-green-800 shadow-xl">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center gap-4">
           <button
             onClick={() => navigate("/")}
-            className="flex items-center gap-2 text-gray-700 hover:text-indigo-600 font-semibold transition-colors group"
+            style={{
+              background: buttonStyles.secondary.bg,
+              boxShadow: buttonStyles.secondary.shadow,
+              color: buttonStyles.secondary.text,
+              border: buttonStyles.secondary.border,
+            }}
+            className="flex items-center gap-2 font-bold py-4 px-6 rounded-3xl transition-all transform hover:scale-105"
           >
-            <span className="text-2xl group-hover:translate-x-[-4px] transition-transform">←</span>
-            Inicio
+            <span className="text-xl">←</span>
+            <span className="hidden sm:inline">SALIR</span>
           </button>
+          <h1 className="text-xl sm:text-2xl font-bold text-white text-center" style={{ fontFamily: "'Press Start 2P', sans-serif" }}>
+            LABORATORIO OAK
+          </h1>
           <button
             onClick={logout}
-            className="flex items-center gap-2 text-red-600 hover:text-red-700 font-semibold transition-colors"
+            style={{
+              background: buttonStyles.danger.bg,
+              boxShadow: buttonStyles.danger.shadow,
+              color: buttonStyles.danger.text,
+              border: buttonStyles.danger.border,
+            }}
+            className="flex items-center gap-2 font-bold py-4 px-6 rounded-3xl transition-all transform hover:scale-105"
           >
-            Cerrar sesión
-            <span className="text-xl">🚪</span>
+            <span className="hidden sm:inline">🚪</span> SALIR
           </button>
         </div>
+      </div>
 
-        {/* Main Card */}
-        <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl p-8 border-4 border-purple-200">
+      <div id="main-content" className="max-w-4xl mx-auto px-4 py-8">
+        <div className="bg-white rounded-3xl shadow-2xl border-8 border-green-600 p-8 mb-6">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-black mb-2 bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 bg-clip-text text-transparent">
-              ✨ Creador de Pokémon ✨
-            </h1>
-            <p className="text-gray-600 text-lg">
-              Combina características para crear tu Pokémon único
+            <h2 className="text-3xl font-bold text-green-800 mb-2">
+              SISTEMA DE FUSIÓN GENÉTICA
+            </h2>
+            <p className="text-gray-600 font-semibold">
+              Crea tu Pokémon único
+            </p>
+            <p className="text-sm text-gray-500 mt-2">
+              Selecciona los componentes genéticos base
             </p>
           </div>
 
-          <div className="space-y-6">
+          {error && (
+            <div 
+              id="error-message"
+              role="alert"
+              aria-live="assertive"
+              className="bg-red-100 border-4 border-red-500 rounded-xl p-4 mb-6 animate-shake"
+              tabIndex={-1}
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">⚠️</span>
+                <div>
+                  <p className="text-red-800 font-bold text-lg">{error}</p>
+                  <p className="text-red-600 text-sm mt-1">Por favor, completa todos los campos requeridos.</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-8">
             <PokemonSelector 
-              label="🎯 Elige la base del Pokémon"
+              label="🧬 ADN BASE DEL POKÉMON"
               options={baseOptions} 
               onSelect={setBase} 
             />
 
             <PokemonSelector 
-              label="⚡ Elige la habilidad especial"
+              label="⚡ PODER ELEMENTAL"
               options={abilityOptions} 
               onSelect={setAbility} 
             />
+
+            <div className="bg-blue-50 border-4 border-blue-300 rounded-2xl p-6">
+              <label 
+                htmlFor="customText"
+                className="font-bold text-lg text-blue-900 block mb-3"
+              >
+                🔬 MODIFICACIONES GENÉTICAS (Opcional)
+              </label>
+              <textarea
+                id="customText"
+                value={customText}
+                onChange={(e) => setCustomText(e.target.value)}
+                placeholder="Ej: con alas metálicas, ojos brillantes, aura eléctrica..."
+                className="w-full px-4 py-3 rounded-xl border-2 border-blue-300 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-200 resize-none bg-white"
+                rows={3}
+                maxLength={200}
+                aria-describedby="customTextHelp"
+              />
+              <div id="customTextHelp" className="text-right text-sm text-blue-600 mt-2">
+                {customText.length}/200 caracteres
+              </div>
+            </div>
           </div>
 
+          {/* ✅ Botón principal con nuevo estilo */}
           <button
             onClick={handleGenerate}
             disabled={loading || !base || !ability}
-            className={`mt-8 w-full px-6 py-4 rounded-2xl font-bold text-lg transition-all transform ${
+            aria-label="Generar Pokémon mediante fusión genética"
+            aria-busy={loading}
+            style={{
+              background: (loading || !base || !ability) ? buttonStyles.disabled.bg : buttonStyles.primary.bg,
+              boxShadow: (loading || !base || !ability) ? buttonStyles.disabled.shadow : buttonStyles.primary.shadow,
+              color: (loading || !base || !ability) ? buttonStyles.disabled.text : buttonStyles.primary.text,
+              border: (loading || !base || !ability) ? buttonStyles.disabled.border : buttonStyles.primary.border,
+            }}
+            className={`mt-8 w-full py-6 px-8 rounded-3xl font-bold text-xl transition-all transform focus:outline-none focus:ring-4 focus:ring-offset-2 ${
               loading || !base || !ability
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-gradient-to-r from-green-400 to-blue-500 text-white hover:from-green-500 hover:to-blue-600 shadow-xl hover:shadow-2xl hover:scale-105"
+                ? "cursor-not-allowed focus:ring-gray-300"
+                : "hover:scale-[1.02] active:scale-95 focus:ring-red-300"
             }`}
           >
             {loading ? (
-              <span className="flex items-center justify-center gap-3">
+              <div className="flex items-center justify-center gap-3">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
-                Generando tu Pokémon...
-              </span>
+                <span>GENERANDO...</span>
+              </div>
             ) : (
-              "🎨 ¡Generar Pokémon!"
+              <span>⚡ INICIAR FUSIÓN GENÉTICA</span>
             )}
           </button>
 
+          {/* ✅ Botones de acción con nuevo estilo */}
           {imageUrl && (
-            <div className="mt-8 animate-fadeIn">
-              <div className="bg-gradient-to-r from-yellow-100 to-pink-100 rounded-2xl p-6 mb-4">
-                <h2 className="font-bold text-2xl text-center mb-4 text-purple-800">
-                  🎉 ¡Tu Pokémon ha sido creado! 🎉
-                </h2>
-                <div className="relative group">
-                  <img 
-                    src={imageUrl} 
-                    alt={`Pokémon ${base} con habilidad ${ability}`}
-                    className="w-full rounded-2xl shadow-2xl border-4 border-white group-hover:scale-105 transition-transform"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl flex items-end justify-center pb-4">
-                    <p className="text-white font-bold text-xl">
-                      {base} + {ability}
-                    </p>
-                  </div>
-                </div>
+            <div className="mt-8 space-y-4">
+              <div className="relative rounded-2xl overflow-hidden border-4 border-green-500 shadow-2xl">
+                <img 
+                  src={imageUrl} 
+                  alt={`Pokémon fusión de ${base} con poderes ${ability}`}
+                  className="w-full h-auto"
+                />
               </div>
-              
-              <div className="grid grid-cols-2 gap-3">
+
+              <div className="grid grid-cols-3 gap-3">
+                <button
+                  onClick={handleDownload}
+                  aria-label="Descargar imagen del Pokémon"
+                  style={{
+                    background: buttonStyles.secondary.bg,
+                    boxShadow: buttonStyles.secondary.shadow,
+                    color: buttonStyles.secondary.text,
+                    border: buttonStyles.secondary.border,
+                  }}
+                  className="font-bold py-5 px-4 rounded-3xl transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-green-300"
+                >
+                  <div className="text-2xl mb-1">💾</div>
+                  <div className="text-sm">GUARDAR</div>
+                </button>
                 <button
                   onClick={handleShare}
-                  className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-4 rounded-xl font-bold hover:from-blue-600 hover:to-cyan-600 transition-all shadow-lg transform hover:scale-105 flex items-center justify-center gap-2"
+                  aria-label="Compartir Pokémon creado"
+                  style={{
+                    background: buttonStyles.tertiary.bg,
+                    boxShadow: buttonStyles.tertiary.shadow,
+                    color: buttonStyles.tertiary.text,
+                    border: buttonStyles.tertiary.border,
+                  }}
+                  className="font-bold py-5 px-4 rounded-3xl transition-all transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
                 >
-                  <span className="text-xl">📋</span>
-                  Compartir
+                  <div className="text-2xl mb-1">📋</div>
+                  <div className="text-sm">COMPARTIR</div>
                 </button>
                 <button
                   onClick={handleReset}
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-xl font-bold hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg transform hover:scale-105 flex items-center justify-center gap-2"
+                  aria-label="Crear nuevo Pokémon"
+                  style={{
+                    background: buttonStyles.warning.bg,
+                    boxShadow: buttonStyles.warning.shadow,
+                    color: buttonStyles.warning.text,
+                    border: buttonStyles.warning.border,
+                  }}
+                  className="font-bold py-5 px-4 rounded-3xl transition-all transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-orange-300"
                 >
-                  <span className="text-xl">🔄</span>
-                  Crear Otro
+                  <div className="text-2xl mb-1">🔄</div>
+                  <div className="text-sm">NUEVO</div>
                 </button>
               </div>
             </div>
           )}
         </div>
 
-        {/* Info Footer */}
-        <div className="mt-8 text-center text-gray-600 bg-white/60 backdrop-blur-sm rounded-2xl p-4">
-          <p className="text-sm">
-            💡 Tip: Prueba diferentes combinaciones para descubrir Pokémon únicos
+        <div className="text-center text-gray-600 bg-white rounded-2xl p-4 border-4 border-gray-300">
+          <p className="text-sm font-semibold">
+            💡 Laboratorio del Profesor Oak - Sistema de Fusión v2.0
           </p>
         </div>
       </div>

@@ -38,17 +38,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     window.location.href = "/";
   };
 
-  // ✅ Mostrar loading mientras se verifica el token
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg font-semibold">Cargando...</p>
-        </div>
+  // Mostrar loading mientras se verifica el token
+if (isLoading) {
+  return (
+    <div 
+      className="min-h-screen bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center"
+      role="status" //  Agregar rol ARIA
+      aria-live="polite" //  Anunciar cambios
+    >
+      <div className="text-center">
+        <div 
+          className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto mb-4"
+          aria-hidden="true" //  Ocultar decoración de lectores de pantalla
+        ></div>
+        <p className="text-gray-600 text-lg font-semibold">
+          Cargando...
+        </p>
+        <span className="sr-only">Verificando autenticación</span> {/*  Texto para lectores */}
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   return (
     <AuthContext.Provider
