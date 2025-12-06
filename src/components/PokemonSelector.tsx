@@ -58,7 +58,6 @@ const abilityEmojis: Record<string, string> = {
   Normal: "⭐",
 };
 
-// ✅ Colores estilo 2048 adaptados a Pokémon
 const abilityColors: Record<string, { bg: string; text: string; shadow: string }> = {
   // Pokémon - Estilo degradado suave
   Pikachu: { 
